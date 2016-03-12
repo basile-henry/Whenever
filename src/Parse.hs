@@ -1,6 +1,7 @@
 module Parse(parseAST) where
 
 import           AST
+import           Control.Monad      (void)
 import           Text.Parsec
 import           Text.Parsec.String (parseFromFile)
 
@@ -19,7 +20,7 @@ line = do
     many $ char ' '
     char ';'
     many $ char ' '
-    char '\n'
+    void endOfLine <|> eof
     return $ Line (read n) s
 
 statement = (try statementAgain) <|> (try statementDefer) <|> (try statementComma) <|> (try statementPrint) <|> statementDoExpr
@@ -98,7 +99,7 @@ expression = (try $ exp2 AST.GT ">")
          <|> (try $ exp2 AST.LE "<=")
          <|> (try $ exp2 AST.NE "!=")
          <|> (try $ exp2 AST.EQ "==")
-         <|> expLExp 
+         <|> expLExp
 
 exp2 f s = do
     l1 <- lExp
@@ -112,7 +113,7 @@ expLExp = do
     l <- lExp
     return $ Exp l
 
-doExp = (try doExpHash) <|> doExpLExp 
+doExp = (try doExpHash) <|> doExpLExp
 
 doExpHash = do
     f <- factor
