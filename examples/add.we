@@ -1,0 +1,5 @@
+1 print("Add 2 numbers:");
+2 defer (1) print(">"), 5#read();
+3 defer (2) print(">"), 5#read();
+4 defer (3) print("result: " U(5));
+5 defer (-1) ;
