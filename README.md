@@ -2,7 +2,7 @@
 
 This is an interpreter for the [Whenever](http://www.dangermouse.net/esoteric/whenever.html) esoteric language written in Haskell.
 
-This project was a great opportunity for me to learn a bit more about the Parsec library (even though I ended up with a relatively naive top-down parsing approach).
+This project was a great opportunity for me to learn a bit more about the Parsec library (even though I ended up with a relatively naïve top-down parsing approach).
 
 ## How to build and run
 ### Cabal
@@ -37,7 +37,7 @@ And then run:
 
 ## Examples
 
-You can find a few examples in the `examples` directory. Most of them have been written by the author of the language and can be found with the [description of the language](http://www.dangermouse.net/esoteric/whenever.html). The `rot13.we` example is a modified version of the example comming from [megahallon's javascript implementation of the interpreter](https://github.com/megahallon/whenever).
+You can find a few examples in the `examples` directory. Most of them have been written by the author of the language and can be found with the [description of the language](http://www.dangermouse.net/esoteric/whenever.html). The `rot13.we` example is a modified version of the example coming from [megahallon's javascript implementation of the interpreter](https://github.com/megahallon/whenever).
 
 ## License
 
