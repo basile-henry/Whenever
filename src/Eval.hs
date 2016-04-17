@@ -3,7 +3,7 @@
 module Eval(evalAST) where
 
 import           AST
-import           Control.Monad (liftM, liftM2)
+import           Control.Monad (liftM, liftM2, filterM)
 import           Data.Char     (isDigit, ord, chr, digitToInt)
 import           Data.List     (delete)
 import qualified Data.Map      as Map
@@ -66,13 +66,15 @@ evalDoExp (Hash  f l)  stack = (updateStack stack) <$> liftM2 replicate (evalLEx
 evalDoExp (DoExp l)    stack = (\n -> updateStack stack [n]) <$> (evalLExp l stack)
 
 updateStack :: Stack -> [Int] -> Stack
-updateStack = foldl (\stack n -> case n < 0 of
-    True  -> delete (-n) stack
-    False -> stack ++ [n])
+updateStack startStack = foldl (\stack n -> case n < 0 of
+        True  -> delete (-n) stack
+        False -> stack ++ [n])
+    startStack
+    . filter (/= 0)
 
 evalLExp :: LExp -> Stack -> IO (Int)
-evalLExp (Add  t1 t2) stack = liftM2 (+) (evalTerm t1 stack) (evalTerm t2 stack)
-evalLExp (Sub  t1 t2) stack = liftM2 (-) (evalTerm t1 stack) (evalTerm t2 stack)
+evalLExp (Add  t l) stack = liftM2 (+) (evalTerm t stack) (evalLExp l stack)
+evalLExp (Sub  t l) stack = liftM2 (-) (evalTerm t stack) (evalLExp l stack)
 evalLExp (LExp t)     stack = evalTerm t stack
 
 evalTerm :: Term -> Stack -> IO (Int)
@@ -109,7 +111,7 @@ getNum = do
             _    -> return []
 
 evalFuncFact :: Function -> LExp -> Stack -> IO (Int)
-evalFuncFact N l stack = length <$> (`filter` stack) <$> (==) <$> (evalLExp l stack)
+evalFuncFact N l stack = length <$> filterM (\x -> (x ==) <$> (evalLExp l stack)) stack
 evalFuncFact U l stack = do
     c <- evalFuncStr U l stack
     return $ if isDigit c

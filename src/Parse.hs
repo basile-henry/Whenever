@@ -153,21 +153,21 @@ lExp = (try lExpAdd) <|> (try lExpSub) <|> lExpTerm
 
 lExpAdd :: Parsec String u LExp
 lExpAdd = do
-    t1 <- term
+    t <- term
     many $ char ' '
     char '+'
     many $ char ' '
-    t2 <- term
-    return $ Add t1 t2
+    l <- lExp
+    return $ Add t l
 
 lExpSub :: Parsec String u LExp
 lExpSub = do
-    t1 <- term
+    t <- term
     many $ char ' '
     char '-'
     many $ char ' '
-    t2 <- term
-    return $ Sub t1 t2
+    l <- lExp
+    return $ Sub t l
 
 lExpTerm :: Parsec String u LExp
 lExpTerm = do

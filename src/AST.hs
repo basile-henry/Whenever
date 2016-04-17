@@ -21,8 +21,8 @@ data Term       = Mul Factor Factor
                 | Mod Factor Factor
                 | Term Factor
                     deriving (Show, Eq)
-data LExp       = Add Term Term
-                | Sub Term Term
+data LExp       = Add Term LExp
+                | Sub Term LExp
                 | LExp Term
                     deriving (Show, Eq)
 data Exp        = GT LExp LExp
